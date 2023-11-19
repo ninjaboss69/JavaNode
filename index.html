@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Server</title>
+</head>
+<body>
+    <h1>Welcome to Tic Tac Toe</h1>
+    <div>
+        <textarea id="input" placeholder="Enter input for Tic Tac Toe"></textarea>
+        <button onclick="feedInputToTheProgram()">Feed Input</button>
+   </div>
+    
+    <div id="output"></div>
+
+    <script>
+         const socket = new WebSocket('ws://localhost:6969');
+
+socket.onopen = (event) => {
+  console.log('WebSocket connection opened:', event);
+};
+
+socket.onmessage = (event) => {
+const node = document.createElement("p");
+const textnode = document.createTextNode(event.data);
+node.appendChild(textnode);
+document.getElementById("output").appendChild(node);
+  
+};
+
+async function feedInputToTheProgram(){
+    const input = document.getElementById('input').value;
+    socket.send(input);
+    document.getElementById('input').value="";
+}
+
+socket.onclose = (event) => {
+  console.log('WebSocket connection closed:', event);
+};
+</script>
+
+   
+</body>
+</html>
